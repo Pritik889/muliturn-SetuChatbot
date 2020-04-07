@@ -11,7 +11,7 @@ const {
     ListStyle
 
 } = require('botbuilder-dialogs');
-const AdaptiveCard = require('../resource/adaptiveCard.json');
+
 
 const NAME_PROMPT = 'NAME_PROMPT';
 const CHOICE_PROMPT = 'CHOICE_PROMPT';
@@ -188,30 +188,41 @@ class UserProfileDialog extends ComponentDialog {
     }
     async summaryStep(step) {
         console.log('summary step called')
+        console.log(step.values.age);
         step.values.travel = step.result.value;
         const card = CardFactory.adaptiveCard({
-            title: 'UserDetail',
-            facts:
-                [
-                    {
-                        key: 'Name',
-                        value: step.values.name
-                    },
-                    {
-                        key: 'Gender',
-                        value: step.values.gender
-                    },
-                    {
-                        key: 'Age',
-                        value: step.values.age
-                    }
-                ]
-        });
+            "type": "AdaptiveCard",
+            "version": "1.0",
+            "body": [
+                {
+                    "type": "TextBlock",
+                    "text": "Personal Details:-",
+                    "horizontalAlignment": "Left",
+                    "size": "Medium",
+                    "weight": "Bolder"
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "Name:",
+                            "value": step.values.name
+                        },
+                        {
+                            "title": "Gender:",
+                            "value": step.values.gender
+                        }
+                    ]
+                }
+            ],
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+        }
+        );
         const message = 'Hey ' + step.values.name + ' infection risk is low.We recommend that you stay at home to avoid any chance of exposure to the Novel'
             + 'Coronavirus';
 
         await step.context.sendActivity(message);
-        // await step.context.sendActivity({ attachments: [card] });
+        await step.context.sendActivity({ attachments: [card] });
         return await step.endDialog();
     }
 
