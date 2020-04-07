@@ -209,7 +209,7 @@ class UserProfileDialog extends ComponentDialog {
                             "value": step.values.name
                         },
                         {
-                            "title": "Gender:",
+                            "title": "Gender: ",
                             "value": step.values.gender
                         }
                     ]
